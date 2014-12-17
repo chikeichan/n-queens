@@ -79,11 +79,33 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      //takes index
+      //this._currentAttributes[index] is the row
+      //  loop through elements in row
+      console.log("is being called");
+      var row = this._currentAttributes[rowIndex];
+      for (var i = 0; i < row.length; i++){
+      //    if (element === 1){ return true};
+        if (row[i]!==0){
+          return true
+        }//considering other ways to represent non-empty squares
+      }
+      //return false;
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      //this._currentAttributes[idx];
+      //loop through row arrays
+      //debugger;
+      var rows = this._currentAttributes;
+      for (var i = 0; i < rows.n; i++){
+        if (this.hasRowConflictAt(i)){
+      //  if hasRowConflictAt(idx):
+          return true;
+        }
+      }
       return false; // fixme
     },
 
@@ -94,11 +116,24 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      //loop thru all rows
+      var rows = this._currentAttributes;
+      for (var i = 0; i < rows.n; i++){
+        if (rows[i][colIndex]!==0){
+          return true;
+        }
+      }
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      var cols = this._currentAttributes.n;
+      //loop thru all column
+      //  for each column
+        //if hasCalConflict at i
+          //return true
+
       return false; // fixme
     },
 
