@@ -15,8 +15,12 @@ nqueen._createBoard = function(n){
 nqueen._quickinsert = function(board,x,y){
   var newBoard = [];
   for(var i = 0; i<board.length; i++){
-    if(i<y){newBoard[i] = board[i]}
-    else {newBoard[i] = board[i].slice();}
+    if(i<x){
+      newBoard[i] = board[i];
+    } else {
+      newBoard[i] = board[i].slice();
+    }
+    //newBoard[i] = board[i].slice();
   }
 
   var n = newBoard.length;
