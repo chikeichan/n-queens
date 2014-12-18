@@ -14,9 +14,41 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = []; //fixme
+  var board = new Board({n: n});
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+
+  var solver = function(brd,rooks){
+    var currRooks = rooks;
+
+    var BoardArgs = [];
+    for(var i=0; i<n;i++){
+      BoardArgs.push(brd.attributes[i]);
+    }
+    var newBrd = new Board(BoardArgs);
+
+    //start iterating
+    for (var i = 0; i < n; i++){
+      newBrd.togglePiece(currRooks, i)
+      if (newBrd.hasAnyRooksConflicts()){
+        newBrd.togglePiece(rooks, i)
+      } else{
+        currRooks++;
+        if(currRooks === n){
+          for (var i = 0; i<n; i++){
+            solution.push(newBrd.attributes[i]);
+          }
+          return;
+        } else {
+          //keep searching
+          return solver(newBrd, currRooks);
+        }
+      }
+    }
+  };
+
+  //start recursion, modifies solution
+  solver(board, 0);
   return solution;
 };
 
@@ -26,7 +58,53 @@ window.findNRooksSolution = function(n) {
 window.countNRooksSolutions = function(n) {
   var solutionCount = undefined; //fixme
 
+  var solution = []; //fixme
+  var board = new Board({n: n});
+
+  var solver = function(brd,rooks){
+    var currRooks = rooks;
+
+    var BoardArgs = [];
+    for(var i=0; i<n;i++){
+      BoardArgs.push(brd.attributes[i]);
+    }
+    var newBrd = new Board(BoardArgs);
+
+    //start iterating
+    for (var i = 0; i < n; i++){
+      if (n===2){debugger;}
+      newBrd.togglePiece(currRooks, i)
+      if (newBrd.hasAnyRooksConflicts()){
+        newBrd.togglePiece(rooks, i)
+      } else{
+        currRooks++;
+        if(currRooks === n){
+          var ans = [];
+          for(var j=0; j<n;j++){
+            ans.push(brd.attributes[j].slice());
+          }
+          solution.push(ans);
+          currRooks--;
+          newBrd.togglePiece(currRooks,i);
+        } else {
+          //keep searching
+          solver(newBrd, currRooks);
+
+          //continue iterating down the tree;
+          currRooks--;
+          newBrd.togglePiece(currRooks,i);
+        }
+
+      }
+    }
+  };
+
+  //start recursion, modifies solution
+  solver(board, 0);
+  solutionCount = solution.length;
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  //solutionCount = solutions.length (array of nested arrays);
+  console.log(solution);
   return solutionCount;
 };
 
