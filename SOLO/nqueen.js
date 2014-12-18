@@ -12,16 +12,13 @@ nqueen._createBoard = function(n){
   }
   return board;
 }
-nqueen._clone = function(board){
-  var cloneBoard = [];
-  for(var i = 0; i<board.length; i++){
-    cloneBoard[i] = board[i].slice();
-  }
-  return cloneBoard;
-}
-
 nqueen._quickinsert = function(board,x,y){
-  var newBoard  = this._clone(board);
+  var newBoard = [];
+  for(var i = 0; i<board.length; i++){
+    if(i<y){newBoard[i] = board[i]}
+    else {newBoard[i] = board[i].slice();}
+  }
+
   var n = newBoard.length;
   for(var i = 0; i<n; i++){
     if(x+i<n && y+i<n) newBoard[x+i][y+i]--;
