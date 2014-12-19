@@ -26,8 +26,8 @@ nqueen._quickinsert = function(board,x,y){
   var n = newBoard.length;
   for(var i = 0; i<n; i++){
     if(x+i<n && y+i<n) newBoard[x+i][y+i]--;
-    if(x-i>=0 && y-i>=0) newBoard[x-i][y-i]--;
-    if(x-i>=0 && y+i<n) newBoard[x-i][y+i]--;
+    //if(x-i>=0 && y-i>=0) newBoard[x-i][y-i]--;
+    //if(x-i>=0 && y+i<n) newBoard[x-i][y+i]--;
     if(x+i<n && y-i>=0) newBoard[x+i][y-i]--;
     if(x+i<n) newBoard[x+i][y]--;
     if(y+i<n) newBoard[x][y+i]--;
@@ -55,24 +55,35 @@ nqueen._quickinsert = function(board,x,y){
 // }
 
 nqueen.solve = function(n){
+  var start = new Date().getTime();
   if(n===0) return [undefined];
 
-  var outcome = [];
+  var outcome = 0;
   //create board n-size
   var board = this._createBoard(n);
 
   //function
-  var _next = function(board,queens){
+  var _next = function(board,queens,force){
     //Uncomment line below to get just one result
     //if(outcome.length>0){return};
-    for (var i=0; i<n; i++){
+    var length = n;
+    if(force !== undefined){
+      length = 1;
+    }
+    for (var q=0; q<length; q++){
       //if(the cell is 0)
+      var i = q;
+      if(force !== undefined){
+        i=force;
+      }
       if(board[queens][i]===0){
         //insert queen
         var newBoard = nqueen._quickinsert(board,queens,i);
         var newQ = queens + 1;
         if(newQ === n){
-          outcome.push(newBoard);
+          // outcome.push(newBoard);
+          outcome++;
+
         } else {
           _next(newBoard,newQ);
         }
@@ -82,6 +93,52 @@ nqueen.solve = function(n){
       }
     }
   }
-  _next(board,0);
+
+  for(var z=0;z<n;z++){
+    _next(board,0,z);
+  }
+
+  //_next(board,0);
+  var end = new Date().getTime();
+  console.log(''+n+' Queens: '+outcome.length+' in '+(end-start)+'ms');
   return outcome;
+}
+
+
+fastsolve = function(n){
+  var start = new Date().getTime();
+  var sol = [];
+
+  var solve = function(board,queens){
+    //var board = board;
+    var nx = board.length;
+    //console.log(board);
+    if(board.length === n){
+      sol.push(board);
+      return;
+    }
+    for (var i = 0; i<n; i++){
+      var legal = true;
+      for (var j=0; j<board.length; j++){
+        var ox = j;
+        var oy = board[j];
+        var slope = Math.abs((nx-ox)/(i-oy));
+        //console.log(nx,ox,i,oy,slope);
+        if(i===oy || slope === 1){
+          legal = false;
+          break;
+        }
+      }
+      if(legal){
+        board.push(i);
+        solve(board)
+        board.pop();
+      }
+    }
+  }
+
+  solve([],0)
+  var end = new Date().getTime();
+  console.log(end-start+'ms');
+  return sol;
 }
