@@ -54,7 +54,7 @@ nqueen._quickinsert = function(board,x,y){
 //   return newBoard;
 // }
 
-nqueen.solve = function(n){
+nqueen.solve = function(n,z){
   var start = new Date().getTime();
   if(n===0) return [undefined];
 
@@ -94,9 +94,9 @@ nqueen.solve = function(n){
     }
   }
 
-  for(var z=0;z<n;z++){
+  //for(var z=0;z<1;z++){
     _next(board,0,z);
-  }
+  //}
 
   //_next(board,0);
   var end = new Date().getTime();
@@ -105,12 +105,12 @@ nqueen.solve = function(n){
 }
 
 
-fastsolve = function(n){
+fastsolve = function(n,z){
   var start = new Date().getTime();
   var sol = [];
 
-  var solve = function(board,queens){
-    //var board = board;
+  var solve = function(board){
+    //var board = board.slice();
     var nx = board.length;
     //console.log(board);
     if(board.length === n){
@@ -136,8 +136,11 @@ fastsolve = function(n){
       }
     }
   }
-
-  solve([],0)
+  if(z!==undefined){
+    solve([z])
+  } else {
+    solve([])
+  }
   var end = new Date().getTime();
   console.log(end-start+'ms');
   return sol;
